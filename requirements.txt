@@ -1,0 +1,12 @@
+#env
+python-dotenv == 0.21.0
+
+#analysis
+pandas == 1.5.0
+
+#aws
+boto3 == 1.24.80
+
+#WebScraping
+selenium == 4.4.3
+webdriver-manager == 3.8.3
