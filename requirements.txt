@@ -13,3 +13,6 @@ webdriver-manager == 3.8.3
 
 #DataBase
 SQLAlchemy == 1.4.42
+
+#ParquetFile
+pyarrow == 9.0.0
