@@ -8,10 +8,11 @@ class DataCleaner():
     def _remove_duplicates(list_df:list) -> list:
         return list(set(list_df))
     
-    def data_cleaner_matches():
+    def data_cleaner_matches_top500_all_servers():
 
-        path_read = 'raw/trackergg/matches_report/'
-        path_write = 'cleaned/trackergg/matches_report/'
+        path_read = 'raw/matches_report/summary/top500/all_servers/'
+
+        path_write = 'cleaned/matches_report/summary/top500/all_servers/'
         
         df_aux = pd.DataFrame()
 
@@ -80,8 +81,8 @@ class DataCleaner():
 
     def data_cleaner_guns():
 
-        path_read = 'raw/trackergg/gun_report/'
-        path_write = 'cleaned/trackergg/gun_report/'
+        path_read = 'raw/gun_report/'
+        path_write = 'cleaned/gun_report/'
 
 
         files = AwsS3.get_files_list(path_read)
@@ -124,10 +125,10 @@ class DataCleaner():
         AwsS3.upload_file(data_final_csv, path_write, file_format)
 
     
-    def data_cleaner_matches_details():
+    def data_cleaner_matches_details_top500_all_servers():
         
-        path_read = 'raw/trackergg/matches_report_details/'
-        path_write = 'cleaned/trackergg/matches_report_details/'     
+        path_read = 'raw/matches_report/details/top500/all_servers/'
+        path_write = 'cleaned/matches_report/details/top500/all_servers/'     
 
         files = AwsS3.get_files_list(path_read)
 
