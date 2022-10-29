@@ -30,8 +30,9 @@ class Crawler():
                 data_aux = response.json()
                 data.append(data_aux)
 
-            data_upload = str(data)
-            AwsS3.upload_file(data_upload, path_write, file_format)
+        data_upload = str(data)
+        AwsS3.upload_file(data_upload, path_write, file_format)
+        time.sleep(2)
 
 
         df = pd.DataFrame(data)
@@ -102,8 +103,9 @@ class Crawler():
                 data.append(data_pre)
                 print('{} - {}'.format(player, page))
                 end_page = time.time()
-                total_time_page = (end_page - start_page)/1000
+                total_time_page = (end_page - start_page)*10
                 print("\n"+ str(total_time_page))
+                time.sleep(2)
 
 
             end_player = time.time()
@@ -118,7 +120,7 @@ class Crawler():
         return data
 
 
-    def get_matches_report_detail_top500_all_servers(matches_list) -> str:
+    def get_matches_report_details_top500_all_servers(matches_list) -> str:
         ''''
             This function's mission is to get a detail report of a match.
             :param [list] matches_list: A variable that receives a matches id list. For example: 2bee0dc9-4ffe-519b-1cbd-7fbe763a6047.
@@ -145,6 +147,7 @@ class Crawler():
             data_pre = driver.find_element('xpath', '//pre').text
 
             AwsS3.upload_file(data_pre, path_write, file_format)
+            time.sleep(2)
 
         driver.quit()
 
