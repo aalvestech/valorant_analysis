@@ -1,8 +1,6 @@
 from aws_s3 import AwsS3
 import pandas as pd
 import json
-import os
-import boto3
 
 class DataCleaner():
 
@@ -184,42 +182,4 @@ class DataCleaner():
                 player_round_damage_dict_list, player_summary_dict_list, 
                 player_round_kills)
 
-    def get_matches_ids_offline(matches_path="",local_path=""):
-        """
-        This function presupposes that a folder containing matches informations exists.
-        """
-        matches_ids = list()
-
-        for file_name in os.listdir(matches_path):
-            match_file = open(f"{matches_path}/{file_name}", encoding="utf8")
-            matches_json=json.loads(match_file.read())
-            if 'data' in matches_json.keys():
-                matches_data = matches_json['data']['matches']
-            for match in matches_data:
-                matches_ids.append(match['attributes']['id'])
-
-        textfile = open(local_path, "w")
-        for element in matches_ids:
-            textfile.write(f"{element}\n")
-        textfile.close()
-
-        print("DONE!")
-
-    def get_matches_ids_online(path_read : str):
-        s3 = boto3.resource('s3')
-
-        files_list = AwsS3.get_files_list(path_read)
-        
-        matches_ids = list()
-
-        for file in files_list:
-            obj = s3.Object(file.bucket_name, file.key)
-            body = obj.get()['Body'].read()
-            matches_json=json.loads(body)
-            if 'data' in matches_json.keys():
-                matches_data = matches_json['data']['matches']
-            for match in matches_data:
-                matches_ids.append(match['attributes']['id'])
-
-        return matches_ids
         
