@@ -32,7 +32,17 @@ def get_top500_players_summarized_matches_report(players_list) -> str:
                 dataframe_row['matchId'] = match['attributes']['id']
                 dataframe_row['mapId'] = match['attributes']['mapId']
                 dataframe_row['modeId'] = match['attributes']['modeId']
+                dataframe_row['modeKey'] = match['metadata']['modeKey']
+                dataframe_row['modeName'] = match['metadata']['modeName']
+                dataframe_row['modeImageUrl'] = match['metadata']['modeImageUrl']
+                dataframe_row['modeMaxRounds'] = match['metadata']['modeMaxRounds']
+                dataframe_row['isAvailable'] = match['metadata']['isAvailable']
+                dataframe_row['timestamp'] = match['metadata']['timestamp']
+                dataframe_row['metadataResult'] = match['metadata']['result']
+                dataframe_row['map'] = match['metadata']['map']
                 dataframe_row['mapName'] = match['metadata']['mapName']
+                dataframe_row['mapImageUrl'] = match['metadata']['mapImageUrl']
+                dataframe_row['seasonName'] = match['metadata']['seasonName']
                 dataframe_row['userId'] = match['segments'][0]['attributes']['platformUserIdentifier']
                 dataframe_row['hasWon'] = match['segments'][0]['metadata']['hasWon']
                 dataframe_row['result'] = match['segments'][0]['metadata']['result']
@@ -41,6 +51,7 @@ def get_top500_players_summarized_matches_report(players_list) -> str:
                     dataframe_row[f"{stat_name}Value"] = stat_value['value']
                     dataframe_row[f"{stat_name}DisplayValue"] = stat_value['displayValue']
                     dataframe_row[f"{stat_name}DisplayType"] = stat_value['displayType']
+
             data.append(dataframe_row)
             print('{} - {}'.format(player, page))
             end_page = time.time()
@@ -105,5 +116,5 @@ def get_top500_players_weapons_report(players_list) -> str:
 
     return df
 
-#get_top500_players_summarized_matches_report(df['leaderboards.full_nickname'])
-get_top500_players_weapons_report(df['leaderboards.full_nickname'])
+get_top500_players_summarized_matches_report(df['leaderboards.full_nickname'])
+#get_top500_players_weapons_report(df['leaderboards.full_nickname'])
