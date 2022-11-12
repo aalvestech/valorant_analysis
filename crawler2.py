@@ -1,8 +1,6 @@
 import pandas as pd
 from selenium import webdriver
-import time
 import json
-import statistics
 
 df = pd.read_csv('data/top500_all_servers.csv')
 
@@ -14,16 +12,10 @@ def get_top500_players_summarized_matches_report(players_list) -> str:
     '''
     driver = webdriver.Chrome()
     data = []
-    player_time=[]
-    page_time=[]
     for player in players_list:
-
-        start_player = time.time()
         
 
         for page in range(1,10):
-
-            start_page = time.time()
 
             
             driver.get('https://api.tracker.gg/api/v2/valorant/standard/matches/riot/{}?type=competitive&next={}'.format(player, page))
@@ -57,20 +49,11 @@ def get_top500_players_summarized_matches_report(players_list) -> str:
                         dataframe_row[f"{stat_name}DisplayValue"] = stat_value['displayValue']
                         dataframe_row[f"{stat_name}DisplayType"] = stat_value['displayType']
                     data.append(dataframe_row)
-            end_page = time.time()
-            total_time_page = (end_page - start_page)*10
-            page_time.append(total_time_page)
-    
-        end_player = time.time()
-        total_time_player = end_player - start_player
-        player_time.append(total_time_player)
 
     df = pd.DataFrame.from_dict(data)
     df.to_csv('data/matches_summarized.csv',index=False)
 
     driver.quit()
-    print(f"Average time to process a page: {statistics.mean(page_time)}")
-    print(f"Average time to process a player: {statistics.mean(player_time)}")
 
     return df
 
@@ -82,13 +65,7 @@ def get_top500_players_weapons_report(players_list) -> str:
     '''
     driver = webdriver.Chrome()
     data = []
-    player_time=[]
-    page_time=[]
     for player in players_list:
-
-        start_player = time.time()
-        
-        start_page = time.time()
         
         driver.get('https://api.tracker.gg/api/v2/valorant/standard/profile/riot/{}/segments/weapon?playlist=competitive&seasonId=default'.format(player))
         data_pre = driver.find_element('xpath', '//pre').text
@@ -104,24 +81,15 @@ def get_top500_players_weapons_report(players_list) -> str:
                     dataframe_row[f"{stat_name}DisplayValue"] = stat_value['displayValue']
                     dataframe_row[f"{stat_name}DisplayType"] = stat_value['displayType']
                 data.append(dataframe_row)
-        end_page = time.time()
-        total_time_page = (end_page - start_page)*10
-        page_time.append(total_time_page)
-    
-        end_player = time.time()
-        total_time_player = end_player - start_player
-        player_time.append(total_time_player)
 
     df = pd.DataFrame.from_dict(data)
     df.to_csv('data/weapons_summarized.csv',index=False)
     driver.quit()
-    print(f"Average time to process a page: {statistics.mean(page_time)}")
-    print(f"Average time to process a player: {statistics.mean(player_time)}")
 
     return df
 
-get_top500_players_summarized_matches_report(df['leaderboards.full_nickname'])
-print("DONE!")
-# get_top500_players_weapons_report(df['leaderboards.full_nickname'])
+# get_top500_players_summarized_matches_report(df['leaderboards.full_nickname'])
 
+get_top500_players_weapons_report(df['leaderboards.full_nickname'])
+print("DONE!")
 # print(df['leaderboards.full_nickname'][0])
