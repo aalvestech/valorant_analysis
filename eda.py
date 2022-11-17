@@ -11,19 +11,14 @@ def matches_eda(df):
     col_names=df.columns
     num_matches=df['matchId'].nunique()
     num_playes=df['player'].nunique()
-    cat_features=df[['player','matchId','mapId','modeId','modeKey','modeName','modeImageUrl','modeMaxRounds','isAvailable','timestamp','metadataResult','map','mapName','mapImageUrl','seasonName','userId',
+    cat_features = ['player','matchId','mapId','modeId','modeKey','modeName','modeImageUrl','modeMaxRounds','isAvailable','timestamp','metadataResult','map','mapName','mapImageUrl','seasonName','userId',
     'hasWon','result','agentName','playtimeDisplayType','roundsPlayedDisplayType','roundsWonDisplayType','roundsLostDisplayType','roundsDisconnectedDisplayType','placementDisplayType','scoreDisplayType',
     'killsDisplayType','deathsDisplayType','assistsDisplayType','damageDisplayType','damageReceivedDisplayType','headshotsDisplayType','grenadeCastsDisplayType','ability1CastsDisplayType','ability2CastsDisplayType',
     'ultimateCastsDisplayType','dealtHeadshotsDisplayType','dealtBodyshotsDisplayType','dealtLegshotsDisplayType','econRatingDisplayType','suicidesDisplayType','revivedDisplayType','firstBloodsDisplayType','firstDeathsDisplayType',
     'lastDeathsDisplayType','survivedDisplayType','tradedDisplayType','kastedDisplayType','kASTDisplayType','flawlessDisplayType','thriftyDisplayType','acesDisplayType','teamAcesDisplayType','clutchesDisplayType','clutchesLostDisplayType',
-    'plantsDisplayType','defusesDisplayType','kdRatioDisplayType','scorePerRoundDisplayType','damagePerRoundDisplayType','headshotsPercentageDisplayType','rankDisplayType']]
-    #só dá uma olhada nesse aqui, pq eu n lembrava direito qual o operator pra pegar todas as colunas exceto as que tão escolhidas
-    num_features=df[~['player','matchId','mapId','modeId','modeKey','modeName','modeImageUrl','modeMaxRounds','isAvailable','timestamp','metadataResult','map','mapName','mapImageUrl','seasonName','userId',
-    'hasWon','result','agentName','playtimeDisplayType','roundsPlayedDisplayType','roundsWonDisplayType','roundsLostDisplayType','roundsDisconnectedDisplayType','placementDisplayType','scoreDisplayType',
-    'killsDisplayType','deathsDisplayType','assistsDisplayType','damageDisplayType','damageReceivedDisplayType','headshotsDisplayType','grenadeCastsDisplayType','ability1CastsDisplayType','ability2CastsDisplayType',
-    'ultimateCastsDisplayType','dealtHeadshotsDisplayType','dealtBodyshotsDisplayType','dealtLegshotsDisplayType','econRatingDisplayType','suicidesDisplayType','revivedDisplayType','firstBloodsDisplayType','firstDeathsDisplayType',
-    'lastDeathsDisplayType','survivedDisplayType','tradedDisplayType','kastedDisplayType','kASTDisplayType','flawlessDisplayType','thriftyDisplayType','acesDisplayType','teamAcesDisplayType','clutchesDisplayType','clutchesLostDisplayType',
-    'plantsDisplayType','defusesDisplayType','kdRatioDisplayType','scorePerRoundDisplayType','damagePerRoundDisplayType','headshotsPercentageDisplayType','rankDisplayType']]
+    'plantsDisplayType','defusesDisplayType','kdRatioDisplayType','scorePerRoundDisplayType','damagePerRoundDisplayType','headshotsPercentageDisplayType','rankDisplayType']
+    cat_features_df=df[cat_features]
+    num_features=matches_df.loc[:, ~matches_df.columns.isin(cat_features)]
     wins_per_agent = df.groupby(['agentName'],as_index=False)[['agentName','hasWon']].sum(numeric_only=True)
     highest_win_agent = wins_per_agent[wins_per_agent.hasWon == wins_per_agent.hasWon.max()]
 
@@ -72,22 +67,16 @@ def weapons_eda(df):
     dmg_done_per_weapon_per_player=df.groupby('player')[['player','weaponName','damageValue']]
     avg_kill_per_round_per_player=df.groupby(['player'])[['player','killsPerRoundValue']].mean(numeric_only=True)
     longest_kill_distance_per_weapon_per_player=df.groupby('weaponName')[['player','weaponName','longestKillDistanceValue']]
-    cat_features=df[['player','weaponName','matchesPlayedDisplayType', 'matchesWonDisplayType', 'matchesLostDisplayType',
+    cat_features=['player','weaponName','matchesPlayedDisplayType', 'matchesWonDisplayType', 'matchesLostDisplayType',
     'matchesTiedDisplayType', 'matchesWinPctDisplayType', 'roundsPlayedDisplayType', 'killsDisplayType',
     'killsPerRoundDisplayType', 'killsPerMatchDisplayType', 'secondaryKillsDisplayType', 'headshotsDisplayType',
     'secondaryKillsPerRoundDisplayType', 'secondaryKillsPerMatchDisplayType', 'deathsDisplayType', 'deathsPerRoundDisplayType',
     'deathsPerMatchDisplayType', 'kDRatioDisplayType', 'headshotsPercentageDisplayType', 'damageDisplayType',
     'damagePerRoundDisplayType', 'damagePerMatchDisplayType', 'damageReceivedDisplayType', 'dealtHeadshotsDisplayType',
     'dealtBodyshotsDisplayType', 'dealtLegshotsDisplayType', 'killDistanceDisplayType', 'avgKillDistanceDisplayType',
-    'longestKillDistanceDisplayType']]
-    num_features=df[~['player','weaponName','matchesPlayedDisplayType', 'matchesWonDisplayType', 'matchesLostDisplayType',
-    'matchesTiedDisplayType', 'matchesWinPctDisplayType', 'roundsPlayedDisplayType', 'killsDisplayType',
-    'killsPerRoundDisplayType', 'killsPerMatchDisplayType', 'secondaryKillsDisplayType', 'headshotsDisplayType',
-    'secondaryKillsPerRoundDisplayType', 'secondaryKillsPerMatchDisplayType', 'deathsDisplayType', 'deathsPerRoundDisplayType',
-    'deathsPerMatchDisplayType', 'kDRatioDisplayType', 'headshotsPercentageDisplayType', 'damageDisplayType',
-    'damagePerRoundDisplayType', 'damagePerMatchDisplayType', 'damageReceivedDisplayType', 'dealtHeadshotsDisplayType',
-    'dealtBodyshotsDisplayType', 'dealtLegshotsDisplayType', 'killDistanceDisplayType', 'avgKillDistanceDisplayType',
-    'longestKillDistanceDisplayType']]
+    'longestKillDistanceDisplayType']
+    cat_features_df=df[cat_features]
+    num_features=matches_df.loc[:, ~matches_df.columns.isin(cat_features)]
 
 def weapon_usage_percentage(df, weapon_name):
     weapon_used = df.groupby('weaponName')[['matchesPlayedValue']].sum().loc[[weapon_name]]['matchesPlayedValue']
